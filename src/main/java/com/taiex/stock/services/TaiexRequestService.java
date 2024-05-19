@@ -1,6 +1,7 @@
 package com.taiex.stock.services;
 
 import com.taiex.stock.entities.StockDay;
+import com.taiex.stock.entities.response.ResponseStockDay;
 import com.taiex.stock.repository.StockDayRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
@@ -26,7 +27,7 @@ public class TaiexRequestService {
     public void requestStockDay() {
         String url = UriComponentsBuilder.fromHttpUrl(stockRequestUrl).build().toUriString();
         try {
-            ResponseEntity<StockDay[]> response = restTemplate.exchange(url, HttpMethod.GET, null, StockDay[].class);
+            ResponseEntity<ResponseStockDay> response = restTemplate.exchange(url, HttpMethod.GET, null, ResponseStockDay.class);
             System.out.println(response);
         } catch (RestClientException e) {
             e.printStackTrace();
