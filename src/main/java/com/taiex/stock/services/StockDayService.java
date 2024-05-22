@@ -7,6 +7,7 @@ import com.taiex.stock.utils.Functions;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,14 +17,20 @@ import static com.taiex.stock.utils.Functions.formatDate;
 @Service
 public class StockDayService {
     private StockDayRepository stockDayRepository;
+    private  final String  SAVE_SUCCESS_MESSAGE ="Save All StockDay Data Successfully";
+    private  final String  ALREADY_DATA_MESSAGE ="Data Already Exist";
 
     public StockDayService(StockDayRepository stockDayRepository) {
         this.stockDayRepository = stockDayRepository;
     }
 
     @Transactional
-    public  void saveAll(ResponseStockDay responseStockDay) {
+    public  String  saveAll(ResponseStockDay responseStockDay) {
         List<StockDay> stockDayList = new ArrayList<>();
+        final LocalDate lastDate = stockDayRepository.findLastDate();
+
+        if(formatDate(responseStockDay.getDate()).equals(lastDate)) return ALREADY_DATA_MESSAGE;
+
         responseStockDay.getData().forEach(item -> {
             StockDay stockDay = new StockDay();
             stockDay.setCode(item.get(0).trim());
@@ -38,5 +45,8 @@ public class StockDayService {
             stockDay.setChangePrice(item.get(8).replace(",", ""));
             stockDay.setTransaction(Integer.parseInt(item.get(9).replace(",","")));
         });
+        stockDayRepository.saveAll(stockDayList);
+        return SAVE_SUCCESS_MESSAGE;
     }
+
 }
