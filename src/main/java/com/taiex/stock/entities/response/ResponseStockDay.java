@@ -12,4 +12,5 @@ public class ResponseStockDay {
     String title;
     List<String> fields = new ArrayList();
     List<List<String>> data = new ArrayList(new ArrayList<>());
+
 }
