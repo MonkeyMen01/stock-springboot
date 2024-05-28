@@ -39,12 +39,15 @@ public class StockDayController extends GlobeLogger {
     public ResponseEntity<String> getTodayStockDayData(){
         try{
             final ResponseEntity<ResponseStockDay> response = taiexRequestService.requestStockDay();
-            final String result =  stockDayService.saveAll(response.getBody());
+            final String result = stockDayService.saveAll(response.getBody());
             logger.info(SUCCESSFUL);
             return new ResponseEntity<>(result, HttpStatus.OK);
-        }catch (Exception e){
-            logger.error(SAVE_FAIL_MESSAGE,e);
-            return new ResponseEntity(SAVE_FAIL_MESSAGE,HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (IllegalArgumentException e) {
+            logger.error("IllegalArgumentException caught: {}", e.getMessage());
+            throw e; // 讓異常被全局異常處理器捕獲
+        } catch (Exception e){
+            logger.error(SAVE_FAIL_MESSAGE, e);
+            return new ResponseEntity<>(SAVE_FAIL_MESSAGE, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
