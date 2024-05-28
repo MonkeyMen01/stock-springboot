@@ -5,10 +5,12 @@ import com.taiex.stock.services.StockDayService;
 import com.taiex.stock.services.TaiexRequestService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
-public class Schedules extends  GlobeLogger{
+@Component
+public class Schedules extends GlobeLogger {
     private final StockDayService stockDayService;
     private final TaiexRequestService taiexRequestService;
 
@@ -18,15 +20,15 @@ public class Schedules extends  GlobeLogger{
     }
 
 
+    //    @Scheduled(cron = "0 16 13 * * ?")
     @Scheduled(cron = "0 0 1 ? * MON-FRI")
-    private void  stockDayScheduled(){
-        try{
+    private void stockDayScheduled() {
+        try {
             final ResponseEntity<ResponseStockDay> response = taiexRequestService.requestStockDay();
-            stockDayService.saveAll(response.getBody());
-            final LocalDateTime now = LocalDateTime.now();
-            logger.info("Scheduled Successful", now);
-        }catch (Exception e){
-            logger.error("Scheduled Fail",e.getMessage());
+            final String result = stockDayService.saveAll(response.getBody());
+            logger.info("Scheduled Save", result);
+        } catch (Exception e) {
+            logger.error("Scheduled Fail", e.getMessage());
         }
     }
 }

@@ -17,16 +17,16 @@ import static com.taiex.stock.utils.Functions.formatDate;
 
 @Service
 public class StockDayService extends GlobeLogger {
-    private StockDayRepository stockDayRepository;
-    private  final String  SAVE_SUCCESS_MESSAGE ="Save All StockDay Data Successfully";
-    private  final String  ALREADY_DATA_MESSAGE ="Data Already Exist";
+    private final StockDayRepository stockDayRepository;
+    private static final String SAVE_SUCCESS_MESSAGE = "Save All StockDay Data Successfully";
+    private static final String ALREADY_DATA_MESSAGE = "Data Already Exist";
 
     public StockDayService(StockDayRepository stockDayRepository) {
         this.stockDayRepository = stockDayRepository;
     }
 
     @Transactional
-    public String saveAll(ResponseStockDay responseStockDay) {
+    public String saveAll(final ResponseStockDay responseStockDay) {
         List<StockDay> stockDayList = new ArrayList<>();
         final LocalDate lastDate = stockDayRepository.findLastDate();
 

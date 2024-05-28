@@ -17,8 +17,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class TaiexRequestService extends GlobeLogger {
 
     @Value("${taiex.stock.days.url}")
-    private String stockRequestUrl;
-    private RestTemplate restTemplate;
+    private static String stockRequestUrl;
+    private final RestTemplate restTemplate;
 
     public TaiexRequestService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
@@ -30,8 +30,8 @@ public class TaiexRequestService extends GlobeLogger {
      */
     public ResponseEntity<ResponseStockDay> requestStockDay() {
         try{
-            String url = UriComponentsBuilder.fromHttpUrl(stockRequestUrl).build().toUriString();
-            ResponseEntity<ResponseStockDay> response = restTemplate.exchange(url, HttpMethod.GET, null, ResponseStockDay.class);
+            final String url = UriComponentsBuilder.fromHttpUrl(stockRequestUrl).build().toUriString();
+            final ResponseEntity<ResponseStockDay> response = restTemplate.exchange(url, HttpMethod.GET, null, ResponseStockDay.class);
             return response;
         }catch (RestClientException e){
             logger.error("Get StockDay API Fail",e.getMessage());
