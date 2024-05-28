@@ -51,7 +51,7 @@ public class StockDayService extends GlobeLogger {
 
                 stockDayList.add(stockDay);
             } catch (NumberFormatException e) {
-                logger.error("Error parsing data for stock day: " + item, e);
+                logger.error("Error parsing data for stock day: {}", item, e);
             }
         });
         stockDayRepository.saveAll(stockDayList);

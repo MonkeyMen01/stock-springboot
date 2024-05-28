@@ -26,6 +26,7 @@ public class StockDayController extends GlobeLogger {
     private final StockDayService stockDayService;
     private final TaiexRequestService taiexRequestService;
     private  final String  SAVE_FAIL_MESSAGE ="Save All StockDay Data Fail";
+    private final  String SUCCESSFUL =" Successful";
 
     public StockDayController(StockDayService stockDayService, TaiexRequestService taiexRequestService) {
         this.stockDayService = stockDayService;
@@ -39,11 +40,10 @@ public class StockDayController extends GlobeLogger {
         try{
             final ResponseEntity<ResponseStockDay> response = taiexRequestService.requestStockDay();
             final String result =  stockDayService.saveAll(response.getBody());
-            final LocalDateTime now = LocalDateTime.now();
-            logger.info(" Successful", now);
+            logger.info(SUCCESSFUL);
             return new ResponseEntity<>(result, HttpStatus.OK);
         }catch (Exception e){
-            logger.error("Scheduled Fail",e.getMessage());
+            logger.error(SAVE_FAIL_MESSAGE,e);
             return new ResponseEntity(SAVE_FAIL_MESSAGE,HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

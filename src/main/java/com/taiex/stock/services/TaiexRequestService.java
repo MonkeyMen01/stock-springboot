@@ -17,7 +17,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class TaiexRequestService extends GlobeLogger {
 
     @Value("${taiex.stock.days.url}")
-    private static String stockRequestUrl;
+    private  String stockRequestUrl;
     private final RestTemplate restTemplate;
 
     public TaiexRequestService(RestTemplate restTemplate) {
