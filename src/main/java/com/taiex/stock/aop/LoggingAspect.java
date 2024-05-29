@@ -13,7 +13,8 @@ import org.springframework.stereotype.Component;
 public class LoggingAspect extends GlobeLogger {
 
     @Pointcut("within(@org.springframework.stereotype.Service *)")
-    public void applicationPackagePointcut() {}
+    public void applicationPackagePointcut() {
+    }
 
 
     @Before("applicationPackagePointcut()")
@@ -21,15 +22,20 @@ public class LoggingAspect extends GlobeLogger {
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
         String[] parameterNames = methodSignature.getParameterNames();
         Object[] parameterValues = joinPoint.getArgs();
-
         StringBuilder parameterString = new StringBuilder();
+
         for (int i = 0; i < parameterNames.length; i++) {
-            if (i > 0) {
+            String parameterValueString;
+            if (parameterValues[i] != null && parameterNames[i] instanceof String && ((String) parameterValues[i]).length() > 100) {
+                parameterValueString = "parameter to long ...";
+            } else {
+                parameterValueString = parameterValues[i] != null ? parameterValues[i].toString() : "Parameter is empty";
+            }
+            parameterString.append(parameterNames[i]).append("->").append(parameterValueString);
+            if (i < parameterNames.length - 1) {
                 parameterString.append(", ");
             }
-            parameterString.append(parameterNames[i]).append("->").append(parameterValues[i]);
         }
-
         logger.info("{}.{}() params:{}", joinPoint.getSignature().getDeclaringTypeName(), joinPoint.getSignature().getName(), parameterString);
     }
 }
