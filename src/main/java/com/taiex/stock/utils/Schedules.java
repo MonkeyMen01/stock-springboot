@@ -20,15 +20,15 @@ public class Schedules extends GlobeLogger {
     }
 
 
-    //    @Scheduled(cron = "0 16 13 * * ?")
-    @Scheduled(cron = "0 0 1 ? * MON-FRI")
+//        @Scheduled(cron = "0 44 14 * * ?")
+    @Scheduled(cron = "0 0 23 ? * MON-FRI")
     private void stockDayScheduled() {
         try {
             final ResponseEntity<ResponseStockDay> response = taiexRequestService.requestStockDay();
             final String result = stockDayService.saveAll(response.getBody());
-            logger.info("Scheduled Save", result);
+            logger.info("Scheduled Save:{}", result);
         } catch (Exception e) {
-            logger.error("Scheduled Fail", e.getMessage());
+            logger.error("Scheduled Fail:{}", e.getMessage());
         }
     }
 }
