@@ -18,6 +18,8 @@ public class Config {
 
     @Value("${domain.name}")
     private String domainName;
+    private static String SWAGGER_UI_URI ="/swagger-ui/**";
+    private static String API_DOCS_URI ="/v3/api-docs/**";
 
     @Bean
     public RestTemplate restTemplate(RestTemplateBuilder builder){
@@ -38,7 +40,7 @@ public class Config {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins(domainName)
+                        .allowedOrigins(domainName,SWAGGER_UI_URI,API_DOCS_URI)
                         .allowCredentials(true)
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .maxAge(3600);
